@@ -15,7 +15,7 @@ public class Client {
             // Connect to the server
             socket = new Socket(address, port);
             in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
-            out = new DataOutputStream(socket.getOutputStream());
+            out = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
         }
         catch(IOException e){
             e.printStackTrace();
@@ -31,22 +31,20 @@ public class Client {
      * @return
      * Response from server as a string
      */
-    public String getResponse(){
-        StringBuilder currentString = new StringBuilder();
+    public String read(){
+        String response = "";
         try {
-            while(in.available() == 0){
-                // waiting for response
-                // TODO: find a way to get rid of this busy wait
+            byte[] inBytes = new byte[99]; // might need to increase this, need to do some testing
+            int byteCount = in.read(inBytes);
+            if(byteCount >= inBytes.length){
+                System.out.println("WARNING: INPUT BUFFER FILLED!");
             }
-
-            for(int i = in.available(); i > 0; i--){
-                char c = (char)in.readByte();
-                currentString.append(c);
-            }
+            response = new String(inBytes).trim();
+            System.out.println("RECV: " + response);
         } catch(IOException e){
             e.printStackTrace();
         }
-        return currentString.toString();
+        return response;
     }
 
     /**
@@ -55,10 +53,11 @@ public class Client {
      * @param payload
      * The string to send to the server
      */
-    public void send(String payload){
+    public void write(String payload){
         try{
-            out.write(payload.getBytes());
+            out.writeBytes(payload);
             out.flush();
+            System.out.println("SEND: " + payload);
         } catch(IOException e){
             e.printStackTrace();
         }
@@ -70,10 +69,10 @@ public class Client {
     public void handshake() {
         System.out.println("Beginning handshake...");
         String user = System.getProperty("user.name");
-        send("HELO");
-        System.out.println(getResponse());
-        send("AUTH " + user);
-        System.out.println(getResponse());
+        write("HELO");
+        read();
+        write("AUTH " + user);
+        read();
     }
 
     /**
@@ -81,9 +80,12 @@ public class Client {
      */
     public void close(){
         try {
-            send("REDY"); // quit won't work if handshake isn't complete
-            send("QUIT");
-            socket.close();
+            write("REDY"); // quit won't work if handshake isn't complete
+            read();
+            write("QUIT");
+            if(read().equals("QUIT")) {
+                socket.close();
+            }
         } catch(IOException e){
             e.printStackTrace();
         }
