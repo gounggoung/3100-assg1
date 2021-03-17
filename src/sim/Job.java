@@ -8,7 +8,7 @@ public class Job {
     public int memory;
     public int disk;
 
-    Job(int submitTime, int jobID, int estRuntime, int core, int memory, int disk) {
+    public Job(int submitTime, int jobID, int estRuntime, int core, int memory, int disk) {
         this.submitTime = submitTime;
         this.jobID = jobID;
         this.estRuntime = estRuntime;

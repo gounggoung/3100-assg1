@@ -42,7 +42,7 @@ public class ServerConfig {
      * @param waitingJobs Number of jobs waiting to run on this server. Details retrieved with LSTJ {@linkplain Client#command(String) command}.
      * @param runningJobs Number of jobs currently running on this server. Details retrieved with LSTJ {@linkplain Client#command(String) command}
      */
-    ServerConfig(String type, int id, State state, int currentStartTime, int core, int memory, int disk, int waitingJobs, int runningJobs){
+    public ServerConfig(String type, int id, State state, int currentStartTime, int core, int memory, int disk, int waitingJobs, int runningJobs){
         this.type = type;
         this.id = id;
         this.state = state;
@@ -72,7 +72,7 @@ public class ServerConfig {
      * @param meanAbsDeviationOfFailure Mean absolute deviation of failures
      * @param lastStartTime Either the initial start time or the start after latest recovery
      */
-    ServerConfig(String type, int id, State state, int currentStartTime, int core, int memory, int disk, int waitingJobs, int runningJobs, int failures, int totalFailureTime, int meanFailureTime, int meanRecoveryTime, int meanAbsDeviationOfFailure, int lastStartTime){
+    public ServerConfig(String type, int id, State state, int currentStartTime, int core, int memory, int disk, int waitingJobs, int runningJobs, int failures, int totalFailureTime, int meanFailureTime, int meanRecoveryTime, int meanAbsDeviationOfFailure, int lastStartTime){
         this.type = type;
         this.id = id;
         this.state = state;
