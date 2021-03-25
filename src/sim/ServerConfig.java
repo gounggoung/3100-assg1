@@ -4,13 +4,11 @@ package sim;
  * An object that holds the configuration of a single server.
  */
 public class ServerConfig {
-    enum State{
-        INACTIVE,
-        BOOTING,
-        IDLE,
-        ACTIVE,
-        UNAVAILABLE
+
+    enum State {
+        INACTIVE, BOOTING, IDLE, ACTIVE, UNAVAILABLE
     }
+
     public String type;
     public int id;
     public State state;
@@ -29,20 +27,26 @@ public class ServerConfig {
     public int meanAbsDeviationOfFailure;
     public int lastStartTime;
 
-
     /**
      * Server information constructor (failures not simulated)
-     * @param type Name of the server type.
-     * @param id ID of the server. Unique to this server type.
-     * @param state Enum of possible server states: INACTIVE | BOOTING | IDLE | ACTIVE | UNAVAILABLE
+     * 
+     * @param type             Name of the server type.
+     * @param id               ID of the server. Unique to this server type.
+     * @param state            Enum of possible server states: INACTIVE | BOOTING |
+     *                         IDLE | ACTIVE | UNAVAILABLE
      * @param currentStartTime Start time of current use.
-     * @param core Core count available to server.
-     * @param memory Memory available to server.
-     * @param disk Disk space available to server.
-     * @param waitingJobs Number of jobs waiting to run on this server. Details retrieved with LSTJ {@linkplain Client#command(String) command}.
-     * @param runningJobs Number of jobs currently running on this server. Details retrieved with LSTJ {@linkplain Client#command(String) command}
+     * @param core             Core count available to server.
+     * @param memory           Memory available to server.
+     * @param disk             Disk space available to server.
+     * @param waitingJobs      Number of jobs waiting to run on this server. Details
+     *                         retrieved with LSTJ
+     *                         {@linkplain Client#command(String) command}.
+     * @param runningJobs      Number of jobs currently running on this server.
+     *                         Details retrieved with LSTJ
+     *                         {@linkplain Client#command(String) command}
      */
-    public ServerConfig(String type, int id, State state, int currentStartTime, int core, int memory, int disk, int waitingJobs, int runningJobs){
+    public ServerConfig(String type, int id, State state, int currentStartTime, int core, int memory, int disk,
+            int waitingJobs, int runningJobs) {
         this.type = type;
         this.id = id;
         this.state = state;
@@ -56,23 +60,35 @@ public class ServerConfig {
 
     /**
      * Server information constructor (failures simulated)
-     * @param type Name of the server type.
-     * @param id ID of the server. Unique to this server type.
-     * @param state Enum of possible server states: INACTIVE | BOOTING | IDLE | ACTIVE | UNAVAILABLE
-     * @param currentStartTime Start time of current use.
-     * @param core Core count available to server.
-     * @param memory Memory available to server.
-     * @param disk Disk space available to server.
-     * @param waitingJobs Number of jobs waiting to run on this server. Details retrieved with LSTJ {@linkplain Client#command(String) command}.
-     * @param runningJobs Number of jobs currently running on this server. Details retrieved with LSTJ {@linkplain Client#command(String) command}
-     * @param failures Number of failures
-     * @param totalFailureTime Total of the failure times
-     * @param meanFailureTime Mean of the time to failure for each failure
-     * @param meanRecoveryTime Mean of the time to recovery for each failure
+     * 
+     * @param type                      Name of the server type.
+     * @param id                        ID of the server. Unique to this server
+     *                                  type.
+     * @param state                     Enum of possible server states: INACTIVE |
+     *                                  BOOTING | IDLE | ACTIVE | UNAVAILABLE
+     * @param currentStartTime          Start time of current use.
+     * @param core                      Core count available to server.
+     * @param memory                    Memory available to server.
+     * @param disk                      Disk space available to server.
+     * @param waitingJobs               Number of jobs waiting to run on this
+     *                                  server. Details retrieved with LSTJ
+     *                                  {@linkplain Client#command(String) command}.
+     * @param runningJobs               Number of jobs currently running on this
+     *                                  server. Details retrieved with LSTJ
+     *                                  {@linkplain Client#command(String) command}
+     * @param failures                  Number of failures
+     * @param totalFailureTime          Total of the failure times
+     * @param meanFailureTime           Mean of the time to failure for each failure
+     * @param meanRecoveryTime          Mean of the time to recovery for each
+     *                                  failure
      * @param meanAbsDeviationOfFailure Mean absolute deviation of failures
-     * @param lastStartTime Either the initial start time or the start after latest recovery
+     * @param lastStartTime             Either the initial start time or the start
+     *                                  after latest recovery
      */
-    public ServerConfig(String type, int id, State state, int currentStartTime, int core, int memory, int disk, int waitingJobs, int runningJobs, int failures, int totalFailureTime, int meanFailureTime, int meanRecoveryTime, int meanAbsDeviationOfFailure, int lastStartTime){
+
+    public ServerConfig(String type, int id, State state, int currentStartTime, int core, int memory, int disk,
+            int waitingJobs, int runningJobs, int failures, int totalFailureTime, int meanFailureTime,
+            int meanRecoveryTime, int meanAbsDeviationOfFailure, int lastStartTime) {
         this.type = type;
         this.id = id;
         this.state = state;
@@ -92,6 +108,7 @@ public class ServerConfig {
 
     @Override
     public String toString() {
-        return "type:" + type + " id:" + id + " state:" + state + " start:" + currentStartTime + " core:" + core + " mem:" + memory + " disk:" + disk + " wait:" + waitingJobs + " run:" + runningJobs + "\n";
+        return "type:" + type + " id:" + id + " state:" + state + " start:" + currentStartTime + " core:" + core
+                + " mem:" + memory + " disk:" + disk + " wait:" + waitingJobs + " run:" + runningJobs + "\n";
     }
 }
