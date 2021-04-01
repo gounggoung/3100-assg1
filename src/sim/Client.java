@@ -2,9 +2,7 @@ package sim;
 
 import java.io.*;
 import java.net.*;
-import java.nio.CharBuffer;
-import java.nio.charset.Charset;
-
+import java.nio.charset.*;
 import sim.DSEvent.EventType;
 
 /**
@@ -17,6 +15,7 @@ public class Client {
     private String lastOutInstruction = "";
     public boolean verbose = false;
 
+
     /**
      * Initialise connection to server and handshake.
      * 
@@ -28,7 +27,7 @@ public class Client {
             // Connect to the server
             socket = new Socket(address, port);
             // 1Mb buffer
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "US-ASCII"));
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.US_ASCII));
             out = new DataOutputStream(socket.getOutputStream());
             handshake();
         } catch (IOException e) {
@@ -36,6 +35,7 @@ public class Client {
         }
 
     }
+
 
     /**
      * Initialise connection to server and handshake. Default connection:
@@ -45,53 +45,43 @@ public class Client {
         this("localhost", 50000);
     }
 
+
     /**
      * Attempts to gracefully close the connection to the server.
      */
     public void close() {
         try {
-            if (command("QUIT").equals("QUIT")) {
-                socket.close();
-            } else {
+            if (!command("QUIT").equals("QUIT")) {
                 command("REDY");
                 command("QUIT");
-                socket.close();
             }
+            socket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    /**
-     * Sends a payload to the connected server and waits for a response.
-     *
-     * @param payload The string to send to the server.
-     * @return The server's response to the payload command.
-     */
-    public String command(String payload) {
-        return command(payload, 1024);
-    }
 
     /**
      * Sends a payload to the connected server and waits for a response.
      * 
      * @param payload      The string to send to the server.
-     * @param bufferLength The size of the buffer to store the server's response.
      * @return The server's response to the payload command.
      */
-    public String command(String payload, int bufferLength) {
+    public String command(String payload) {
         try {
             payload += '\n';
             out.write(payload.getBytes());
             lastOutInstruction = payload; // Used for debugging. Private class variable
             if (verbose)
                 System.out.print("SEND: " + payload);
-            return read(bufferLength);
+            return read();
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
     }
+
 
     /**
      * Initializes the connection to the server simulator
@@ -101,6 +91,7 @@ public class Client {
         command("HELO");
         command("AUTH " + user);
     }
+
 
     /**
      * Requests the next available job from the server
@@ -112,7 +103,7 @@ public class Client {
         DSEvent event = null;
         switch (response[0]) {
         case "JOBP":
-            // TODO
+            // TODO Stage 2
 
             // Might need to remove previous instance of job or update
             // Falls through to JOBN for now
@@ -134,11 +125,11 @@ public class Client {
             event = new DSEvent(EventType.COMPLETE);
             break;
         case "RESF":
-            // TODO
+            // TODO Stage 2
             // Information on latest server failure
             break;
         case "RESR":
-            // TODO
+            // TODO Stage 2
             // Information on latest server recovery
             break;
         case "NONE":
@@ -152,14 +143,6 @@ public class Client {
         return event;
     }
 
-    /**
-     * Request all server configurations.
-     * 
-     * @return An array of strings representing each server configuration.
-     */
-    public ServerConfig[] getServers() {
-        return getServers("All");
-    }
 
     /**
      * Request server configurations.
@@ -175,7 +158,6 @@ public class Client {
             // Following commands process 'DATA' from Server
             String[] data = command("GETS " + arg).split(" ");
             int messageCount = Integer.parseInt(data[1]);
-            int messageLength = Integer.parseInt(data[2]);
 
             // Client ready for received servers
             out.write("OK\n".getBytes());
@@ -232,15 +214,9 @@ public class Client {
      *
      * @return Response from server as a string
      */
-    private String read(int bufferLength) throws IOException {
+    private String read() throws IOException {
         String response = "";
         try {
-            /*
-             * char[] inBytes = new char[bufferLength]; int byteCount = in.read(inBytes); if
-             * (byteCount >= bufferLength) {
-             * System.out.println("WARNING: Input buffer of size " + bufferLength +
-             * " full"); } response = inBytes.toString().trim();
-             */
             response = in.readLine();
             if (verbose)
                 System.out.println("RECV: " + response);
@@ -256,9 +232,9 @@ public class Client {
     /**
      * Schedules a job on a server
      * 
-     * @param jobID
-     * @param serverType
-     * @param serverID
+     * @param jobID ID of the job to schedule
+     * @param serverType Server type to run the job
+     * @param serverID  Server ID (unique to server type) to run the job
      */
     public void scheduleJob(int jobID, String serverType, int serverID) {
         command("SCHD " + jobID + " " + serverType + " " + serverID);

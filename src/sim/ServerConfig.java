@@ -1,7 +1,7 @@
 package sim;
 
 /**
- * An object that holds the configuration of a single server.
+ * Container for the configuration of a single server.
  */
 public class ServerConfig {
 

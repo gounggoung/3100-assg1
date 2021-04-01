@@ -1,5 +1,9 @@
 package sim;
 
+/**
+ * Container for the information returned alongside "JOBP" or "JOBN"
+ * when the REDY command is issued.
+ */
 public class Job extends DSEvent {
 
     public int submitTime;

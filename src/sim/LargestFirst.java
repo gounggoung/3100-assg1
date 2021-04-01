@@ -2,6 +2,9 @@ package sim;
 
 import java.util.Comparator;
 
+/**
+ * Comparator for Stage1 sorting
+ */
 public class LargestFirst implements Comparator<ServerConfig> {
 
     @Override
