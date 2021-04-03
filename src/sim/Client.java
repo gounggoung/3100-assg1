@@ -26,7 +26,6 @@ public class Client {
         try {
             // Connect to the server
             socket = new Socket(address, port);
-            // 1Mb buffer
             in = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.US_ASCII));
             out = new DataOutputStream(socket.getOutputStream());
             handshake();
