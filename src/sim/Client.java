@@ -1,9 +1,13 @@
 package sim;
 
-import java.io.*;
-import java.net.*;
-import java.nio.charset.*;
 import sim.DSEvent.EventType;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Handles connection to the server and provides methods to issue commands.
