@@ -1,5 +1,3 @@
-# COMP3100 Assignment 1
+# COMP3100 Assignment 2
 
-* 45621861 - Bailey Gibbons
-* 45953171 - Neil Roberts
 * 45983224 - Jacob Johnston
