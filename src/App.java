@@ -32,22 +32,8 @@ public class App {
                     // Can't do this outside loop, REDY needs to be called before GETS
                     currentServerStates = client.getServers("Capable " + job.core + " " + job.memory + " " + job.disk);
 
-                    // if(xml == null){
-                    //     try {
-                    //         xml = new XMLParse(new File("src/ds-system.xml"));
-                    //         costs = xml.getCosts();
-                    //     } catch (SAXException e) {
-                    //         // TODO Auto-generated catch block
-                    //         e.printStackTrace();
-                    //     } catch (IOException e) {
-                    //         // TODO Auto-generated catch block
-                    //         e.printStackTrace();
-                    //     }
 
-                        
-                    // }
-                   
-                    // System.out.println(job.toString());
+                    //Send job to first server that has required available cores
 
                     boolean found = false;
                     for (ServerConfig server : currentServerStates) {
@@ -59,17 +45,9 @@ public class App {
                     }
 
                     if (!found) {
-                        // String type;
-                        // float lowestCost = Integer.MAX_VALUE;
-                        // ServerConfig bestServer = null;
-                        // for(ServerConfig server : currentServerStates){
-                        //     type = server.type;
-                        //     if(costs.get(type) < lowestCost){
-                        //         lowestCost = costs.get(type);
-                        //         bestServer= server;
-                        //     }
-                        // }
                         
+                        //Send schedule jobs to wait on server with longest start time if no servers have required cores - most likely temporary implementation
+
                         ServerConfig bestServer = null;
                         int maxStart = 0;
                         for(ServerConfig server : currentServerStates){
