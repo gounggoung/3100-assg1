@@ -13,7 +13,7 @@ public class App {
         Client client = new Client(); // Handshake is handled by constructor
 
         ServerConfig[] currentServerStates = null;
-        ArrayList<Job> waitingJobs = new ArrayList<>();
+        
 
         // Event loop
         for (DSEvent event = client.getEvent(); event.eventType != DSEvent.EventType.NONE; event = client.getEvent()) {
@@ -32,9 +32,6 @@ public class App {
                     boolean found = false;
                     for (ServerConfig server : currentServerStates) {
                         if (server.core >= job.core) {
-                            if(job.jobID == 93){
-                                int test = 3;
-                            }
                             client.scheduleJob(job.jobID, server.type, server.id);
                             found = true;
                             break;
@@ -42,22 +39,13 @@ public class App {
                     }
 
                     if (!found) {
-                        client.scheduleJob(job.jobID, currentServerStates[0].type, currentServerStates[0].id);
+                        int chosenServer = (int)(Math.random()*currentServerStates.length);
+                        System.out.println(chosenServer);
+                        client.scheduleJob(job.jobID, currentServerStates[chosenServer].type, currentServerStates[chosenServer].id);
                     }
 
                     break;
                 case COMPLETE:
-                    for (Job waitingJob : waitingJobs) {
-                        currentServerStates = client.getServers("Capable " + waitingJob.core + " " + waitingJob.memory + " " + waitingJob.disk);
-                        for (ServerConfig server : currentServerStates) {
-                            if (server.core >= waitingJob.core) {
-    
-                                client.scheduleJob(waitingJob.jobID, server.type, server.id);
-                                waitingJobs.remove(waitingJob);
-                                break;
-                            }
-                        }
-                    }
                     break;
 
                 case FAILURE:
