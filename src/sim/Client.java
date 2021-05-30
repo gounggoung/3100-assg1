@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 
 /**
  * Handles connection to the server and provides methods to issue commands.
@@ -210,6 +211,11 @@ public class Client {
             e.printStackTrace();
         }
         return serverConfigs;
+    }
+
+    public String getWaitingTimes(ServerConfig server){
+        
+        return command("EJWT " + server.type + " " + server.id);
     }
 
     /**
