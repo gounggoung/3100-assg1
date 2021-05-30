@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -219,6 +220,37 @@ public class Client {
         response[1] = String.valueOf(server.id);
         response[2] = command("EJWT " + server.type + " " + server.id);
         return response;
+    }
+
+    public int getJobListing(ServerConfig server){
+        int jobCount = 0;
+        command("LSTJ " + server.type + " " + server.id);
+
+        try {
+            out.write("OK\n".getBytes());
+            String[] response;
+            for(response = in.readLine().split(" "); response.length > 1; response = in.readLine().split(" ")){
+                jobCount++;
+                out.write("OK\n".getBytes());
+            }
+            
+            return jobCount;
+        } catch (IOException e) {
+           
+            e.printStackTrace();
+        }
+
+       
+        return 0;
+        
+    }
+
+    public int queryCount(ServerConfig server){
+        int total = 0;
+
+        total += Integer.parseInt(command("CNTJ " + server.type + " " + server.id + " " + "1"));
+        //total += Integer.parseInt(command("CNTJ " + server.type + " " + server.id + " " + "2"));
+        return total;
     }
 
     /**
