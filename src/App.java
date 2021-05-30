@@ -22,7 +22,7 @@ public class App {
         HashMap<String, Float> costs = null;
         // Event loop
         for (DSEvent event = client.getEvent(); event.eventType != DSEvent.EventType.NONE; event = client.getEvent()) {
-           // System.out.println(event.eventType);
+            // System.out.println(event.eventType);
 
             switch (event.eventType) {
 
@@ -32,8 +32,7 @@ public class App {
                     // Can't do this outside loop, REDY needs to be called before GETS
                     currentServerStates = client.getServers("Capable " + job.core + " " + job.memory + " " + job.disk);
 
-
-                    //Send job to first server that has required available cores
+                    // Send job to first server that has required available cores
 
                     boolean found = false;
                     for (ServerConfig server : currentServerStates) {
@@ -45,16 +44,18 @@ public class App {
                     }
 
                     if (!found) {
-                        
-                        //Send schedule jobs to wait on server with longest start time if no servers have required cores - most likely temporary implementation
+
+                        // Send jobs to server with the lowest estimated time to complete scheduled jobs
 
                         ServerConfig bestServer = null;
-                        int maxStart = 0;
-                        for(ServerConfig server : currentServerStates){
-                            if(server.currentStartTime > maxStart){
+                        int minRun = Integer.MAX_VALUE;
+                        for (ServerConfig server : currentServerStates) {
+                            int currentRun = client.getEstJobRuntime(server);
+                            if ( currentRun < minRun) {
+                                minRun = currentRun;
                                 bestServer = server;
                             }
-                        }   
+                        }
 
                         client.scheduleJob(job.jobID, bestServer.type, bestServer.id);
                     }
