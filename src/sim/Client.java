@@ -213,7 +213,13 @@ public class Client {
         }
         return serverConfigs;
     }
-
+    /**
+     * Request the estimated sum of waiting times on server.
+     * 
+     * @param server The server to check the waiting time of
+     * 
+     * @return An array in the form [serverType][serverID][waitingTimes]
+     */
     public String[] getWaitingTimes(ServerConfig server){
         String[] response = new String[3];
         response[0] = server.type;
@@ -222,6 +228,13 @@ public class Client {
         return response;
     }
 
+    /**
+     * Request the estimated runtime of all queued jobs
+     * 
+     * @param server The server to check the runtime of
+     * 
+     * @return The estimated runTime of all queued jobs on the server
+     */
     public int getEstJobRuntime(ServerConfig server){
         int runtime = 0;
         command("LSTJ " + server.type + " " + server.id);
@@ -247,11 +260,19 @@ public class Client {
         
     }
 
+    /**
+     * Request the number of jobs running, and waiting on the server
+     * 
+     * @param server The server to check the job count of
+     * 
+     * @return Number of running, and queued jobs on server
+     */
+
     public int queryCount(ServerConfig server){
         int total = 0;
 
         total += Integer.parseInt(command("CNTJ " + server.type + " " + server.id + " " + "1"));
-        //total += Integer.parseInt(command("CNTJ " + server.type + " " + server.id + " " + "2"));
+        total += Integer.parseInt(command("CNTJ " + server.type + " " + server.id + " " + "2"));
         return total;
     }
 
