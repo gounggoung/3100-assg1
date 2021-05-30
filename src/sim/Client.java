@@ -222,19 +222,21 @@ public class Client {
         return response;
     }
 
-    public int getJobListing(ServerConfig server){
-        int jobCount = 0;
+    public int getEstJobRuntime(ServerConfig server){
+        int runtime = 0;
         command("LSTJ " + server.type + " " + server.id);
 
         try {
             out.write("OK\n".getBytes());
             String[] response;
             for(response = in.readLine().split(" "); response.length > 1; response = in.readLine().split(" ")){
-                jobCount++;
+                int startTime = Integer.parseInt(response[2]);
+                int estRun = Integer.parseInt(response[3]);
+                runtime += estRun;
                 out.write("OK\n".getBytes());
             }
             
-            return jobCount;
+            return runtime;
         } catch (IOException e) {
            
             e.printStackTrace();
