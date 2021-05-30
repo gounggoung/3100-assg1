@@ -213,9 +213,12 @@ public class Client {
         return serverConfigs;
     }
 
-    public String getWaitingTimes(ServerConfig server){
-        
-        return command("EJWT " + server.type + " " + server.id);
+    public String[] getWaitingTimes(ServerConfig server){
+        String[] response = new String[3];
+        response[0] = server.type;
+        response[1] = String.valueOf(server.id);
+        response[2] = command("EJWT " + server.type + " " + server.id);
+        return response;
     }
 
     /**
