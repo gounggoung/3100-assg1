@@ -8,8 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.HashMap;
+
 
 /**
  * Handles connection to the server and provides methods to issue commands.
@@ -108,7 +107,7 @@ public class Client {
         DSEvent event = null;
         switch (response[0]) {
         case "JOBP":
-            // TODO Stage 2
+           
 
             // Might need to remove previous instance of job or update
             // Falls through to JOBN for now
@@ -130,11 +129,11 @@ public class Client {
             event = new DSEvent(EventType.COMPLETE);
             break;
         case "RESF":
-            // TODO Stage 2
+            
             // Information on latest server failure
             break;
         case "RESR":
-            // TODO Stage 2
+            
             // Information on latest server recovery
             break;
         case "NONE":
@@ -243,7 +242,6 @@ public class Client {
             out.write("OK\n".getBytes());
             String[] response;
             for(response = in.readLine().split(" "); response.length > 1; response = in.readLine().split(" ")){
-                int startTime = Integer.parseInt(response[2]);
                 int estRun = Integer.parseInt(response[3]);
                 runtime += estRun;
                 out.write("OK\n".getBytes());

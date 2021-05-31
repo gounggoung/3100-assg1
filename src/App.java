@@ -1,12 +1,5 @@
 import sim.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-
-import org.xml.sax.SAXException;
 
 /**
  * The driver class for the program. This delegates communication to a Client
@@ -18,8 +11,8 @@ public class App {
         Client client = new Client(); // Handshake is handled by constructor
 
         ServerConfig[] currentServerStates = null;
-        XMLParse xml = null;
-        HashMap<String, Float> costs = null;
+        
+        
         // Event loop
         for (DSEvent event = client.getEvent(); event.eventType != DSEvent.EventType.NONE; event = client.getEvent()) {
             // System.out.println(event.eventType);
